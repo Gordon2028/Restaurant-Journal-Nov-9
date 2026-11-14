@@ -4,6 +4,27 @@ A mobile-first, installable web app (PWA) that helps foodies remember the restau
 
 **Status: connected to Supabase.** It works offline first (everything saves to the device), and syncs to your Supabase project when you're signed in. Without Supabase keys it runs fully on the device. Backend details: [docs/backend.md](docs/backend.md).
 
+## Screenshots
+
+Captured on a phone-sized screen (390×844). They show the app's built-in sample data (25 made-up New York visits with generated placeholder photos), not real people or meals.
+
+<table>
+  <tr>
+    <td align="center" width="25%"><img src="docs/screenshots/01-home.png" alt="Home screen with a big Add a spot button" /><br /><sub><b>Home</b><br />One big button to log a meal</sub></td>
+    <td align="center" width="25%"><img src="docs/screenshots/02-capture.png" alt="Rating a meal with a thumbs up and the dish name" /><br /><sub><b>Capture</b><br />Place, thumbs up, dish. Done in seconds</sub></td>
+    <td align="center" width="25%"><img src="docs/screenshots/03-my-spots.png" alt="Searching My spots for pizza" /><br /><sub><b>My spots</b><br />Forgiving search by dish, place or vibe</sub></td>
+    <td align="center" width="25%"><img src="docs/screenshots/04-spot.png" alt="Detail page for a restaurant visit" /><br /><sub><b>A spot</b><br />Dish, vibe tags and a link to the map</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="25%"><img src="docs/screenshots/05-map.png" alt="Map of New York with pins for each saved spot" /><br /><sub><b>Map</b><br />Every place you've loved, pinned</sub></td>
+    <td align="center" width="25%"><img src="docs/screenshots/06-best-bites.png" alt="Grid of the best dishes eaten" /><br /><sub><b>Best bites</b><br />Your favorite dishes at a glance</sub></td>
+    <td align="center" width="25%"><img src="docs/screenshots/07-shared-list.png" alt="A shared list as a friend sees it" /><br /><sub><b>Shared list</b><br />A plain link a friend can open, no login</sub></td>
+    <td></td>
+  </tr>
+</table>
+
+Regenerate them with `node scripts/screenshots.mjs` (see the comment at the top of that file).
+
 ## Run it
 
 ```bash
@@ -11,9 +32,9 @@ npm install
 npm run dev        # http://localhost:5173
 ```
 
-Copy `.env.example` to `.env.local` and fill in your Supabase URL and **publishable** key (Project Settings → API). With them set, sign-in is a real email link. Leave them empty to try the app in local-only mode (any email works, nothing is sent). In local-only mode and on the dev server, **Settings → Add sample spots** loads 25 made-up NYC visits.
+Copy `.env.example` to `.env.local` and fill in your Supabase URL and **publishable** key (Project Settings → API). With them set, you create a real account with an email and password. Leave them empty to try the app in local-only mode (any email works, nothing is sent). In local-only mode and on the dev server, **Settings → Add sample spots** loads 25 made-up NYC visits.
 
-Before the email link works, add your app's address to Supabase → Authentication → URL Configuration (see [docs/backend.md](docs/backend.md)).
+If you turn on "Confirm email" in Supabase, add your app's address to Supabase → Authentication → URL Configuration so the confirmation link brings people back (see [docs/backend.md](docs/backend.md)).
 
 | Command | What it does |
 | --- | --- |
@@ -24,6 +45,7 @@ Before the email link works, add your app's address to Supabase → Authenticati
 | `npm test` | Vitest unit tests (ranking, place matching, share whitelist, metrics, data layer, offline outbox, sync merge) |
 | `npm run e2e` | Playwright: builds in local-only mode (never touches the real backend), then runs the happy path. First time: `npx playwright install chromium` |
 | `node scripts/make-icons.mjs` | Regenerates PWA icons |
+| `node scripts/screenshots.mjs` | Regenerates the README screenshots (against a local-only dev server) |
 
 ## Stack
 
@@ -77,6 +99,6 @@ Host mode / itinerary generation, "rut breaker" new-opening suggestions, friend 
 
 ## Verified so far / not verified
 
-Verified: lint, typecheck, 41 unit tests (including the offline queue and sync merge rules), 3 Playwright tests in local-only mode (full happy path including opening a share link logged out, offline capture, map). Against the live Supabase project: the schema and RLS are applied; anonymous requests are refused on every table and function; the storage bucket is private; the two Edge Functions are deployed and behave correctly for unknown/malformed/unauthenticated calls; the app starts in online mode and shows the email sign-in.
+Verified: lint, typecheck, 45 unit tests (including the offline queue and sync merge rules), 3 Playwright tests in local-only mode (full happy path including opening a share link logged out, offline capture, map). Against the live Supabase project: the schema and RLS are applied; anonymous requests are refused on every table and function; the storage bucket is private; the two Edge Functions are deployed and behave correctly for unknown/malformed/unauthenticated calls; the app starts in online mode and shows the email sign-in.
 
 **Not verified (needs a real signed-in session):** the actual email + password sign-in, push/pull sync with real rows and photos, the public page with real data, account deletion, and the admin metrics. Also not verified: real phone camera/EXIF, the native share sheet, installing to a home screen, and Lighthouse.
